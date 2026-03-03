@@ -13,6 +13,33 @@
   programs.niri.enable = true;
   programs.fish.enable = true;
   
+  # Enable hardware graphics and the NVIDIA VAAPI translator
+  hardware.graphics = {
+    enable = true;
+    extraPackages = with pkgs; [
+      nvidia-vaapi-driver
+    ];
+  };
+
+  # Ensure the proprietary NVIDIA driver is actually loaded
+  services.xserver.videoDrivers = [ "nvidia" ];
+
+  # Force Wayland apps (like wl-screenrec) to use the translator
+  environment.variables = {
+    LIBVA_DRIVER_NAME = "nvidia";
+    GBM_BACKEND = "nvidia-drm";
+    __GLX_VENDOR_LIBRARY_NAME = "nvidia";
+  };
+  
+  hardware.nvidia = {
+    # This is required for Wayland compositors like Niri to work at all
+    modesetting.enable = true;
+
+    # THE FIX: Explicitly declare the open-source driver state
+    # Change this to false ONLY if you have a GTX 10-series or older!
+    open = true; 
+  };
+
   # This will auto install iflow cli
   programs.fish.shellAliases = {
     iflow = "npx -y @iflow-ai/iflow-cli";
@@ -181,12 +208,15 @@
     vscode
     jetbrains.idea
 
+    pkgs.jdk25
+
     wget
     git
     curl
 
     #Chat
     vesktop
+    telegram-desktop
 
     #Notes
     obsidian
@@ -255,8 +285,11 @@
     fzf
     
     # Screen Recorder
-    wl-screenrec
+    wf-recorder
     obs-studio
+
+    # Notif
+    libnotify
 
   ];
 
