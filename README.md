@@ -51,6 +51,23 @@ mkdir -p ~/.config/quickshell
 ln -s /home/loke/noctalia-shell ~/.config/quickshell/noctalia-shell
 ```
 
+# rEFInd
+```
+git clone https://github.com/gutlessCGH/RONBM.git ~/Downloads/RONBM
+
+# Create the themes directory if it doesn't exist
+sudo mkdir -p /boot/EFI/refind/themes
+
+# Move the RONBM folder there
+sudo cp -r ~/Downloads/RONBM /boot/EFI/refind/themes/
+sudo nano /boot/EFI/refind/refind.conf
+```
+- Add this:
+  ```
+  include themes/RONBM/theme.conf
+
+  ```
+
 
 # Pinyin input 
 fcitx5-configtool
