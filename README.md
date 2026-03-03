@@ -93,10 +93,8 @@ python main.py
 ```
 
 # Upcomming
-- Word list
 - Other CTF tools
 - Ascii Img
 - Login rice
-- Monster-Siren list download
 
 
