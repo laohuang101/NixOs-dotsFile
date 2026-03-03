@@ -1,5 +1,14 @@
 # Rebuild
-sudo nixos-rebuild switch --flake .#nixos
+``` sudo nixos-rebuild switch --flake .#nixos ```
+
+# CleanUp
+``` sudo nix-collect-garbage -d ```
+
+# Update
+```
+cd /etc/nixos
+sudo nix flake update
+```
 
 # OS
 NixOs 26.05
