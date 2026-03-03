@@ -72,6 +72,26 @@ sudo sed -i 's|themes/[^/]*/|/EFI/themes/RONBM/|g' /boot/EFI/themes/RONBM/theme.
 # Pinyin input 
 fcitx5-configtool
 
+# Monster-Siren
+```
+git clone https://github.com/khanhn201/monster-siren-download.git
+cd monster-siren-download
+nix-shell -p ffmpeg "python3.withPackages(ps: with ps; [ requests tqdm pillow mutagen pydub ])" --run fish
+```
+```
+# Create the environment and tell it to inherit the Nix packages
+python -m venv .venv --system-site-packages
+
+# Activate the virtual environment in Fish
+source .venv/bin/activate.fish
+
+# Install the one missing pure-Python package
+pip install pylrc
+
+# Start the downloader!
+python main.py
+```
+
 # Upcomming
 - Word list
 - Other CTF tools
