@@ -24,7 +24,39 @@
     ];
 
   # Bootloader.
-  boot.loader.refind.enable = true;
+    
+  # Setup rEFIne automatically
+  boot.loader.refind = {
+    enable = true;
+    # This 'extraConfig' is appended to the bottom of the generated refind.conf
+    extraConfig = ''
+      resolution max
+
+      # 1. Load the theme
+      include /EFI/themes/RONBM/theme.conf
+
+      # 2. Hide the generic auto-detected Linux icons
+      scan_all_linux_kernels false
+      # This forces rEFInd to use the manual entries or better-detected ones
+      scanfor manual,external
+
+      # 3. UI Tweaks (Optional)
+      timeout 5
+      selection_big   icons/selection_big.png
+      selection_small icons/selection_small.png
+
+      # 4. Load Windows
+      dont_scan_dirs EFI/Microsoft,EFI/Boot
+      dont_scan_files bootmgfw.efi
+      menuentry "Windows 11" {
+        icon /EFI/themes/RONBM/icons/os_win.png
+        volume addb950f-a503-4ccf-b410-c07b0ed38122
+        loader \EFI\Microsoft\Boot\bootmgfw.efi
+      }
+
+    '';
+  };
+
   boot.loader.systemd-boot.enable = false;
   boot.loader.grub.enable = false;
   boot.loader.efi.canTouchEfiVariables = true;
@@ -72,6 +104,17 @@
       fcitx5-rime           # Optional: If you prefer the Rime engine
     ];
   };
+
+  # Enable standard web fonts and emojis
+  fonts.packages = with pkgs; [
+    noto-fonts
+    noto-fonts-cjk-sans      # For Chinese/Japanese/Korean characters
+    noto-fonts-color-emoji         # Emojis!
+    liberation_ttf           # Free replacements for Arial, Times New Roman, etc.
+    corefonts                # Standard Microsoft fonts
+  ];
+  
+
 
   # Enable the X11 windowing system.
   services.xserver.enable = true;
@@ -128,8 +171,11 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
+
     vim
     vscode
+    jetbrains.idea
+
     wget
     git
     curl
