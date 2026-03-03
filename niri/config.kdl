@@ -313,6 +313,15 @@ animations {
 // Find more information on the wiki:
 // https://yalter.github.io/niri/Configuration:-Window-Rules
 
+//Disable hot-corner
+gestures {
+    // Disable the top-left overview hot corner
+    hot-corners {
+        off
+    }
+}
+
+// Windows opacity
 window-rule {
     opacity 0.95
 }
@@ -370,8 +379,9 @@ binds {
     //spawn chormium
     Mod+B { spawn "chromium"; }
 
+    Mod+N { spawn "noctalia-shell" "ipc" "call" "plugin" "togglePanel" "notes-scratchpad"; }
 
-   Mod+Escape { spawn "noctalia-shell" "ipc" "call" "sessionMenu" "toggle"; }
+    Mod+Escape { spawn "noctalia-shell" "ipc" "call" "sessionMenu" "toggle"; }
     
     // Mod-Shift-/, which is usually the same as Mod-?,
     // shows a list of important hotkeys.
