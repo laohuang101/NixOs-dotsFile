@@ -42,7 +42,14 @@ kitty 0.45.0
 if cloning the dot file should fixed the brightness control problem
 
 # Noctalia link
-``` ln -sfn $(nix build --no-link --print-out-paths /etc/nixos#noctalia)/share/noctalia-shell ~/.config/quickshell/noctalia-shell ```
+``` 
+# 1. Create the parent folder
+mkdir -p ~/.config/quickshell
+
+# 2. Create the link
+# (Assuming your folder is in your home directory)
+ln -s /home/loke/noctalia-shell ~/.config/quickshell/noctalia-shell
+```
 
 
 # Pinyin input 
