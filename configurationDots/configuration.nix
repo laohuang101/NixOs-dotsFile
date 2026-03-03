@@ -15,7 +15,7 @@
   
   # This will auto install iflow cli
   programs.fish.shellAliases = {
-    iflow = "npx iflow-cli";
+    iflow = "npx -y @iflow-ai/iflow-cli";
   };
 
   imports =
@@ -122,6 +122,7 @@
   # Enable the GNOME Desktop Environment.
   services.displayManager.gdm.enable = true;
   services.desktopManager.gnome.enable = true;
+  services.gnome.core-utilities.enable = false;
 
   # Configure keymap in X11
   services.xserver.xkb = {
