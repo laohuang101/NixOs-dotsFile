@@ -1,7 +1,8 @@
-# Migrate
+# Migrate (This is super duper slow...)
 ```
-sudo nixos-rebuild switch --flake .#nixos --max-jobs 1 --cores 1
+sudo nixos-rebuild switch --flake /etc/nixos#nixos --max-jobs 1 --cores 1
 ```
+- If RAM enough can remove the --max-jobs 1 --core 1
 
 # Rebuild
 ``` 
