@@ -24,8 +24,11 @@
     ];
 
   # Bootloader.
-  boot.loader.systemd-boot.enable = true;
+  boot.loader.refind.enable = true;
+  boot.loader.systemd-boot.enable = false;
+  boot.loader.grub.enable = false;
   boot.loader.efi.canTouchEfiVariables = true;
+
   boot.kernelParams = [ "nvidia.NVreg_EnableBacklightHandler=0" "acpi_backlight=video" ];
 
   networking.hostName = "nixos"; # Define your hostname.
