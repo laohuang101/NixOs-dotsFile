@@ -164,7 +164,7 @@
   };
 
   # Install firefox.
-  programs.firefox.enable = true;
+  programs.firefox.enable = false;
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
@@ -172,7 +172,11 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
+    # For slow bongo
+    evtest
+    cava    
 
+    #Editor --nano is being installed by default
     vim
     vscode
     jetbrains.idea
@@ -180,6 +184,12 @@
     wget
     git
     curl
+
+    #Chat
+    vesktop
+
+    #Notes
+    obsidian
     
     #Performance Monitor? Nah just leh your terminal looks better
     fastfetch
@@ -216,7 +226,17 @@
 
     #CTF
     burpsuite
-    #More but lz to install now just testing with BP for the Java Based App openning issue
+    
+    #!!More but lz to install now just testing with BP for the Java Based App openning issue
+    
+    #Wordlist    
+    (wordlists.override { 
+      lists = [ 
+        seclists 
+        rockyou 
+      ]; 
+    })
+
 
     #Ai - for iflow
     nodejs
@@ -234,6 +254,9 @@
     ripgrep
     fzf
     
+    # Screen Recorder
+    wl-screenrec
+    obs-studio
 
   ];
 
