@@ -269,7 +269,7 @@ layout {
 
 // This line starts waybar, a commonly used bar for Wayland compositors.
 // spawn-at-startup "waybar"
-spawn-at-startup "qs" "-c" "noctalia-shell"
+spawn-at-startup "noctalia-shell"
 
 spawn-at-startup "xwayland-satellite"
 
@@ -371,7 +371,7 @@ binds {
     Mod+B { spawn "chromium"; }
 
 
-    Mod+Escape { spawn "qs" "-c" "noctalia-shell" "ipc" "call" "sessionMenu" "toggle"; }
+   Mod+Escape { spawn "noctalia-shell" "ipc" "call" "sessionMenu" "toggle"; }
     
     // Mod-Shift-/, which is usually the same as Mod-?,
     // shows a list of important hotkeys.
