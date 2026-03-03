@@ -25,9 +25,6 @@ sudo nixos-rebuild switch --flake /etc/nixos#nixos
 # OS
 NixOs 26.05
 
-# Package count
-1376
-
 # Shell
 fish 4.5.0
 
@@ -74,4 +71,12 @@ sudo sed -i 's|themes/[^/]*/|/EFI/themes/RONBM/|g' /boot/EFI/themes/RONBM/theme.
 
 # Pinyin input 
 fcitx5-configtool
+
+# Upcomming
+- Word list
+- Other CTF tools
+- Ascii Img
+- Login rice
+- Monster-Siren list download
+
 
