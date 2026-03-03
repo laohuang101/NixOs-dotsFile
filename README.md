@@ -55,17 +55,20 @@ ln -s /home/loke/noctalia-shell ~/.config/quickshell/noctalia-shell
 ```
 git clone https://github.com/gutlessCGH/RONBM.git ~/Downloads/RONBM
 
-# Create the themes directory if it doesn't exist
-sudo mkdir -p /boot/EFI/refind/themes
+# 1. Create a safe folder outside of the 'refind' directory
+sudo mkdir -p /boot/EFI/themes/RONBM
 
-# Move the RONBM folder there
-sudo cp -r ~/Downloads/RONBM /boot/EFI/refind/themes/
-sudo nano /boot/EFI/refind/refind.conf
+# 2. Copy your downloaded theme into the safe folder
+sudo cp -r ~/Downloads/RONBM/* /boot/EFI/themes/RONBM/
+
+# 3. Fix the paths inside the theme to point to the safe folder
+sudo sed -i 's|themes/[^/]*/|/EFI/themes/RONBM/|g' /boot/EFI/themes/RONBM/theme.conf
 ```
-- Add this:
-  ```
-  include themes/RONBM/theme.conf
 
+
+- Verify
+  ```
+sudo sed -i 's|themes/[^/]*/|/EFI/themes/RONBM/|g' /boot/EFI/themes/RONBM/theme.conf
   ```
 
 
