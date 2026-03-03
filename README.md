@@ -1,3 +1,8 @@
+# Migrate
+```
+sudo nixos-rebuild switch --flake .#nixos --max-jobs 1 --cores 1
+```
+
 # Rebuild
 ``` 
 cd /etc/nixos
@@ -5,7 +10,9 @@ sudo nixos-rebuild switch --flake .#nixos
 ```
 
 # CleanUp
-``` sudo nix-collect-garbage -d ```
+``` 
+sudo nix-collect-garbage -d
+```
 
 # Update
 ```
@@ -39,26 +46,4 @@ if cloning the dot file should fixed the brightness control problem
 
 # Pinyin input 
 fcitx5-configtool
-
-
-# Migration
-## Can try this but not sure if it works or not
-
-```
-# 1. Move to the config folder
-cd /etc/nixos
-
-# 2. Keep the NEW hardware file (this is the only file unique to this PC)
-sudo cp hardware-configuration.nix ~/hardware-backup.nix
-
-# 3. Delete the default configuration
-sudo rm *.nix
-
-# 4. Pull your setup from GitHub
-# (Note: we use '.' to clone into the current folder)
-sudo git clone https://github.com/laohuang101/NixOs-dotsFile.git .
-
-# 5. Put the NEW hardware file back in
-sudo cp ~/hardware-backup.nix ./hardware-configuration.nix
-```
 
