@@ -68,7 +68,7 @@ sudo sed -i 's|themes/[^/]*/|/EFI/themes/RONBM/|g' /boot/EFI/themes/RONBM/theme.
 
 - Verify
   ```
-sudo sed -i 's|themes/[^/]*/|/EFI/themes/RONBM/|g' /boot/EFI/themes/RONBM/theme.conf
+  sudo sed -i 's|themes/[^/]*/|/EFI/themes/RONBM/|g' /boot/EFI/themes/RONBM/theme.conf
   ```
 
 
