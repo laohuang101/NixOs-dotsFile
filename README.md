@@ -1,5 +1,8 @@
 # Rebuild
-``` sudo nixos-rebuild switch --flake .#nixos ```
+``` 
+cd /etc/nixos
+sudo nixos-rebuild switch --flake .#nixos
+```
 
 # CleanUp
 ``` sudo nix-collect-garbage -d ```
