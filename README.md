@@ -1,8 +1,18 @@
-# Migrate (This is super duper slow...)
+# Migrate (This included zed and other application that is super duper slow to download...)
 ```
-sudo nixos-rebuild switch --flake /etc/nixos#nixos --max-jobs 1 --cores 1
+# Create an 64GB swap file
+sudo fallocate -l 64G /swapfile
+sudo chmod 600 /swapfile
+sudo mkswap /swapfile
+sudo swapon /swapfile
+
+# Run your rebuild again (if u want u can set the core limit use)
+sudo nixos-rebuild switch --cores 5
+
+# Turn off and remove the swap file once you're done
+sudo swapoff /swapfile
+sudo rm /swapfile
 ```
-- If RAM enough can remove the --max-jobs 1 --cores 1
 
 # Rebuild
 ``` 
