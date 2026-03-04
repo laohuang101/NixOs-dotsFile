@@ -12,7 +12,9 @@
 
   programs.niri.enable = true;
   programs.fish.enable = true;
-  
+  programs.nix-ld.enable = true;  
+
+
   # Enable hardware graphics and the NVIDIA VAAPI translator
   hardware.graphics = {
     enable = true;
@@ -29,6 +31,11 @@
     LIBVA_DRIVER_NAME = "nvidia";
     GBM_BACKEND = "nvidia-drm";
     __GLX_VENDOR_LIBRARY_NAME = "nvidia";
+  };
+
+  environment.sessionVariables = {
+    # Force Chromium and Electron apps to bypass XWayland
+    NIXOS_OZONE_WL = "1";
   };
   
   hardware.nvidia = {
@@ -108,19 +115,28 @@
 
   # Select internationalisation properties.
   i18n.defaultLocale = "en_US.UTF-8";
-
   i18n.extraLocaleSettings = {
-    LC_ADDRESS = "ms_MY.UTF-8";
-    LC_IDENTIFICATION = "ms_MY.UTF-8";
-    LC_MEASUREMENT = "ms_MY.UTF-8";
-    LC_MONETARY = "ms_MY.UTF-8";
-    LC_NAME = "ms_MY.UTF-8";
-    LC_NUMERIC = "ms_MY.UTF-8";
-    LC_PAPER = "ms_MY.UTF-8";
-    LC_TELEPHONE = "ms_MY.UTF-8";
-    LC_TIME = "ms_MY.UTF-8";
-  };
 
+    LC_ADDRESS = "ms_MY.UTF-8";
+
+    LC_IDENTIFICATION = "ms_MY.UTF-8";
+
+    LC_MEASUREMENT = "ms_MY.UTF-8";
+
+    LC_MONETARY = "ms_MY.UTF-8";
+
+    LC_NAME = "ms_MY.UTF-8";
+
+    LC_NUMERIC = "ms_MY.UTF-8";
+
+    LC_PAPER = "ms_MY.UTF-8";
+
+    LC_TELEPHONE = "ms_MY.UTF-8";
+
+    LC_TIME = "ms_MY.UTF-8";
+
+  };
+  
   i18n.inputMethod = {
     enable = true;
     type = "fcitx5";
@@ -207,6 +223,7 @@
     vim
     vscode
     jetbrains.idea
+    pkgs.zed-editor
 
     pkgs.jdk25
 
@@ -291,6 +308,13 @@
     # Notif
     libnotify
 
+    # zip & unzip
+    zip
+    unzip
+
+    # storage usage
+    ncdu   
+     
   ];
 
   # Enable XDG portals for screen sharing/compatibility
