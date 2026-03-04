@@ -25,6 +25,11 @@ sudo nixos-rebuild switch --flake .#nixos
 sudo nix-collect-garbage -d
 ```
 
+# Build cache clear
+```
+sudo rm -rf /nix/var/nix/builds/*
+```
+
 # Update
 ```
 cd /etc/nixos
