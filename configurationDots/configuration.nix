@@ -271,8 +271,28 @@
     xwayland
     xwayland-satellite
 
-    #CTF
+    # CTF
+
+    # Web
     burpsuite
+    nmap # netowrk mapping
+    ffuf # find network hidden directory
+    sqlmap # sql injection
+
+    # Forensic
+    steghide
+    binwalk
+    exiftool
+    wireshark
+
+    # Reverse
+    ghidra
+    python3Packages.pwntools    
+
+    # Crypto
+    hashcat
+    john    
+
     
     #!!More but lz to install now just testing with BP for the Java Based App openning issue
     
