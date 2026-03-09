@@ -5,6 +5,11 @@
 { config, pkgs, inputs, ... }:
 
 {
+  # Set default terminal to kitty
+  environment.variables = {
+    TERMINAL = "kitty";
+  };
+
   # This tells NixOS to use Niri as the default desktop session
   services.displayManager.defaultSession = "niri";
 
@@ -18,6 +23,7 @@
   # Enable hardware graphics and the NVIDIA VAAPI translator
   hardware.graphics = {
     enable = true;
+    enable32Bit = true;
     extraPackages = with pkgs; [
       nvidia-vaapi-driver
     ];
@@ -209,6 +215,17 @@
   # Install firefox.
   programs.firefox.enable = false;
 
+  # Install Steam
+  programs.steam = {
+    enable = true;
+    remotePlay.openFirewall = true; # Open ports in the firewall for Steam Remote Play
+    dedicatedServer.openFirewall = true; # Open ports in the firewall for Source Dedicated Server
+  };
+
+
+  programs.gamemode.enable = true;
+
+
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
@@ -334,7 +351,13 @@
 
     # storage usage
     ncdu   
-     
+
+    # Anime
+    ani-cli     
+
+    # Game
+    heroic
+    
   ];
 
   # Enable XDG portals for screen sharing/compatibility
