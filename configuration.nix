@@ -5,6 +5,11 @@
 { config, pkgs, inputs, ... }:
 
 {
+  # Set default terminal to kitty
+  environment.variables = {
+    TERMINAL = "kitty";
+  };
+
   # This tells NixOS to use Niri as the default desktop session
   services.displayManager.defaultSession = "niri";
 
@@ -12,7 +17,53 @@
 
   programs.niri.enable = true;
   programs.fish.enable = true;
+  programs.nix-ld.enable = true;  
+
+
+  # Enable hardware graphics and the NVIDIA VAAPI translator
+  hardware.graphics = {
+    enable = true;
+    enable32Bit = true;
+    extraPackages = with pkgs; [
+      nvidia-vaapi-driver
+    ];
+  };
+
+  # Ensure the proprietary NVIDIA driver is actually loaded
+  services.xserver.videoDrivers = [ "nvidia" ];
+
+  # Force Wayland apps (like wl-screenrec) to use the translator
+  environment.variables = {
+    LIBVA_DRIVER_NAME = "nvidia";
+    GBM_BACKEND = "nvidia-drm";
+    __GLX_VENDOR_LIBRARY_NAME = "nvidia";
+  };
+
+  environment.sessionVariables = {
+    # Force Chromium and Electron apps to bypass XWayland
+    NIXOS_OZONE_WL = "1";
+  };
   
+  hardware.nvidia = {
+    # This is required for Wayland compositors like Niri to work at all
+    modesetting.enable = true;
+
+    # THE FIX: Explicitly declare the open-source driver state
+    # Change this to false ONLY if you have a GTX 10-series or older!
+    open = true; 
+
+
+    prime = {
+    offload = {
+      enable = true;
+      enableOffloadCmd = true;
+    };
+    # We need to find your exact Bus IDs for these two lines!
+    intelBusId = "PCI:0:2:0"; 
+    nvidiaBusId = "PCI:1:0:0";
+  };
+  };
+
   # This will auto install iflow cli
   programs.fish.shellAliases = {
     iflow = "npx -y @iflow-ai/iflow-cli";
@@ -79,31 +130,41 @@
   services.illum.enable = true;
 
 
+  # For at
+  services.atd.enable = true;
+
   # Select internationalisation properties.
+ # Select internationalisation properties.
   i18n.defaultLocale = "en_US.UTF-8";
-
-  i18n.extraLocaleSettings = {
-    LC_ADDRESS = "ms_MY.UTF-8";
-    LC_IDENTIFICATION = "ms_MY.UTF-8";
-    LC_MEASUREMENT = "ms_MY.UTF-8";
-    LC_MONETARY = "ms_MY.UTF-8";
-    LC_NAME = "ms_MY.UTF-8";
-    LC_NUMERIC = "ms_MY.UTF-8";
-    LC_PAPER = "ms_MY.UTF-8";
-    LC_TELEPHONE = "ms_MY.UTF-8";
-    LC_TIME = "ms_MY.UTF-8";
+  i18n.extraLocaleSettings = {  
+    LC_ADDRESS = "en_US.UTF-8";
+    LC_IDENTIFICATION = "en_US.UTF-8";
+    LC_MEASUREMENT = "en_US.UTF-8";
+    LC_MONETARY = "en_US.UTF-8";
+    LC_NAME = "en_US.UTF-8";
+    LC_NUMERIC = "en_US.UTF-8";
+    LC_PAPER = "en_US.UTF-8";
+    LC_TELEPHONE = "en_US.UTF-8";
+    LC_TIME = "en_US.UTF-8";
   };
-
+  
   i18n.inputMethod = {
     enable = true;
     type = "fcitx5";
-    fcitx5.waylandFrontend = true; # Critical for Niri/Wayland
+    fcitx5.waylandFrontend = true;
     fcitx5.addons = with pkgs; [
+      fcitx5-rime
       qt6Packages.fcitx5-chinese-addons
-      fcitx5-gtk            # Support for GTK apps
-      fcitx5-rime           # Optional: If you prefer the Rime engine
+      fcitx5-gtk
     ];
   };
+
+  environment.variables = {
+    GTK_IM_MODULE = pkgs.lib.mkForce null;
+    QT_IM_MODULE = pkgs.lib.mkForce null;
+    XMODIFIERS = pkgs.lib.mkForce "@im=ibus"; # Keep this one ONLY for old XWayland apps
+  };
+
 
   # Enable standard web fonts and emojis
   fonts.packages = with pkgs; [
@@ -122,7 +183,7 @@
   # Enable the GNOME Desktop Environment.
   services.displayManager.gdm.enable = true;
   services.desktopManager.gnome.enable = true;
-  services.gnome.core-utilities.enable = false;
+  services.gnome.core-apps.enable = false;
 
   # Configure keymap in X11
   services.xserver.xkb = {
@@ -164,7 +225,18 @@
   };
 
   # Install firefox.
-  programs.firefox.enable = true;
+  programs.firefox.enable = false;
+
+  # Install Steam
+  programs.steam = {
+    enable = true;
+    remotePlay.openFirewall = true; # Open ports in the firewall for Steam Remote Play
+    dedicatedServer.openFirewall = true; # Open ports in the firewall for Source Dedicated Server
+  };
+
+
+  programs.gamemode.enable = true;
+
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
@@ -172,14 +244,29 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
+    # For slow bongo
+    evtest
+    cava    
 
+    #Editor --nano is being installed by default
     vim
     vscode
     jetbrains.idea
+    pkgs.zed-editor
+
+    pkgs.jdk25
+    python3
 
     wget
     git
     curl
+
+    #Chat
+    vesktop
+    telegram-desktop
+
+    #Notes
+    obsidian
     
     #Performance Monitor? Nah just leh your terminal looks better
     fastfetch
@@ -214,9 +301,40 @@
     xwayland
     xwayland-satellite
 
-    #CTF
+    # CTF
+
+    # Web
     burpsuite
-    #More but lz to install now just testing with BP for the Java Based App openning issue
+    nmap # netowrk mapping
+    ffuf # find network hidden directory
+    sqlmap # sql injection
+
+    # Forensic
+    steghide
+    binwalk
+    exiftool
+    wireshark
+
+    # Reverse
+    ghidra
+    python3Packages.pwntools    
+
+    # Crypto
+    hashcat
+    john    
+
+    
+    
+    #!!More but lz to install now just testing with BP for the Java Based App openning issue
+    
+    #Wordlist    
+    (wordlists.override { 
+      lists = [ 
+        seclists 
+        rockyou 
+      ]; 
+    })
+
 
     #Ai - for iflow
     nodejs
@@ -234,7 +352,28 @@
     ripgrep
     fzf
     
+    # Screen Recorder
+    wf-recorder
+    obs-studio
 
+    # Notif
+    libnotify
+
+    # zip & unzip
+    zip
+    unzip
+
+    # storage usage
+    ncdu   
+
+    # Anime
+    ani-cli     
+
+    # Game
+    heroic
+
+    # YouTube audio download
+    yt-dlp    
   ];
 
   # Enable XDG portals for screen sharing/compatibility
