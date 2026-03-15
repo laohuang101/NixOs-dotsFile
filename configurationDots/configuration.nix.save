@@ -130,9 +130,6 @@
   services.illum.enable = true;
 
 
-  # For at
-  services.atd.enable = true;
-
   # Select internationalisation properties.
  # Select internationalisation properties.
   i18n.defaultLocale = "en_US.UTF-8";
@@ -150,23 +147,19 @@
   
   i18n.inputMethod = {
     enable = true;
-    type = "fcitx5";
-    fcitx5.waylandFrontend = true;
-    fcitx5.addons = with pkgs; [
-      fcitx5-rime
-      qt6Packages.fcitx5-chinese-addons
-      fcitx5-gtk
+    type = "ibus";
+    ibus.engines = with pkgs.ibus-engines; [
+      (rime.override { rimeDataPkgs = [ pkgs.rime-data pkgs.rime-ice ]; })
     ];
   };
 
   environment.variables = {
-    GTK_IM_MODULE = pkgs.lib.mkForce null;
-    QT_IM_MODULE = pkgs.lib.mkForce null;
-    XMODIFIERS = pkgs.lib.mkForce "@im=ibus"; # Keep this one ONLY for old XWayland apps
-  };
+  GTK_IM_MODULE = pkgs.lib.mkForce null;
+  QT_IM_MODULE = pkgs.lib.mkForce null;
+  XMODIFIERS = pkgs.lib.mkForce "@im=ibus"; 
+};
 
-
-  # Enable standard web fonts and emojis
+  #Enable standard web fonts and emojis
   fonts.packages = with pkgs; [
     noto-fonts
     noto-fonts-cjk-sans      # For Chinese/Japanese/Korean characters
@@ -371,9 +364,7 @@
 
     # Game
     heroic
-
-    # YouTube audio download
-    yt-dlp    
+    
   ];
 
   # Enable XDG portals for screen sharing/compatibility
