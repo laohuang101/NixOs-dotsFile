@@ -3,6 +3,11 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    
+    #claude-code = {
+    #  url = "github:sadjow/claude-code-nix";
+    #  inputs.nixpkgs.follows = "nixpkgs";
+    #};
 
     noctalia = {
       url = "github:noctalia-dev/noctalia-shell";
@@ -24,7 +29,8 @@ outputs = inputs@{ self, nixpkgs, ... }:
       packages.${system} = {
         noctalia = inputs.noctalia.packages.${system}.default;
         noctalia-qs = inputs.noctalia-qs.packages.${system}.default;
-      };
+     #   claude-code = inputs.claude-code.packages.${system}.default;
+     };
 
       nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
         inherit system;

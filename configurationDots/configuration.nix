@@ -2,7 +2,7 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, inputs, ... }:
+{ config, pkgs, inputs, lib, ... }:
 
 {
   # Set default terminal to kitty
@@ -10,13 +10,31 @@
     TERMINAL = "kitty";
   };
 
+  boot.kernelModules = [ "ashmem_linux" "binder_linux" ];
+
+  
+  # Ensure you have Docker enabled
+  virtualisation.docker.enable = true;
+
   # This tells NixOS to use Niri as the default desktop session
   services.displayManager.defaultSession = "niri";
 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
   programs.niri.enable = true;
-  programs.fish.enable = true;
+  programs.fish = {
+    enable = true;
+    interactiveShellInit = ''
+      zoxide init fish | source
+      function adroid
+        sudo docker run -itd --rm --memory-swappiness=0 --privileged -v ~/data:/data -p 5555:5555 redroid/redroid:11.0.0-latest
+        echo "Waiting for Android to boot..."
+        sleep 5
+        adb connect localhost:5555
+        scrcpy -s localhost:5555 --no-audio
+      end
+    '';
+  };
   programs.nix-ld.enable = true;  
 
 
@@ -63,6 +81,7 @@
     nvidiaBusId = "PCI:1:0:0";
   };
   };
+
 
   # This will auto install iflow cli
   programs.fish.shellAliases = {
@@ -112,7 +131,7 @@
   boot.loader.grub.enable = false;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  boot.kernelParams = [ "nvidia.NVreg_EnableBacklightHandler=0" "acpi_backlight=video" ];
+  boot.kernelParams = [ "nvidia.NVreg_EnableBacklightHandler=0" "acpi_backlight=video" "binder.devices=binder,hwbinder,vndbinder" ];
 
   networking.hostName = "nixos"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
@@ -218,11 +237,12 @@
     isNormalUser = true;
     description = "loke";
     shell = pkgs.fish;
-    extraGroups = [ "networkmanager" "wheel" "video" "input" ];
+    extraGroups = [ "networkmanager" "wheel" "video" "input" "docker" "render" ];
     packages = with pkgs; [
     #  thunderbird
     ];
   };
+
 
   # Install firefox.
   programs.firefox.enable = false;
@@ -280,10 +300,11 @@
     fish
     eza #Need to set fish alias to trigger the icon when ls already did in Arch config lz move now
     bat
+    zoxide #For path tp can use z to tp or zi to search
 
     #Package Manager
     rofi #Using configuration from adi1090x ( https://github.com/adi1090x/rofi )
-
+     
     #WM
     niri
 
@@ -336,9 +357,12 @@
     })
 
 
-    #Ai - for iflow
+    # Ai - for iflow
     nodejs
     nodePackages.npm
+    # Ai - claude
+    # inputs.claude-code.packages.${pkgs.system}.default
+
 
     #Music
     musikcube
@@ -370,10 +394,15 @@
     ani-cli     
 
     # Game
-    heroic
+    #  heroic-bin
+    scrcpy
+    android-tools
 
     # YouTube audio download
     yt-dlp    
+
+    # video compress
+    pkgs.handbrake
   ];
 
   # Enable XDG portals for screen sharing/compatibility
