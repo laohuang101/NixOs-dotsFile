@@ -127,6 +127,7 @@ add hardware -> tpm
 
 ## Create configuration
 ```
+mkdir -p ~/.config/winapps
 nano ~/.config/winapps/winapps.conf
 ```
 
