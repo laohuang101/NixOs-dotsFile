@@ -209,3 +209,9 @@ sudo usermod -a -G kvm loke
 cd ~/.local/share/winapps
 LIBVIRT_DEFAULT_URI="qemu:///system" ./setup.sh
 ```
+
+## kill and shut down windows
+```
+pkill xfreerdp
+virsh -c qemu:///system shutdown RDPWindows
+```
