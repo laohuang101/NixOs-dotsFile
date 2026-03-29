@@ -120,16 +120,26 @@ WAFLAVOR="libvirt"
 GUEST_NAME="RDPWindows"
 LIBVIRT_URI="qemu:///system"
 ```
+## Check windows activation key
+
+```
+sudo strings /sys/firmware/acpi/tables/MSDM
+```
 
 ## In windows
-1. Create winapss user and password
-2. Allow the user to have admin access
+1. Upgrade using pro key
+
+   ```
+   VK7JG-NPHTM-C97JM-9MPGT-3V66T
+   ```
+2. Create winapss user and password
+3. Allow the user to have admin access
 ```
 net user winapps mypassword /add
 net localgroup administrators winapps /add
 ```
 
-3. Add the user to the Remote Desktop whitelist
+4. Add the user to the Remote Desktop whitelist
 *in remote desktop settings -> add user
 
 ```
