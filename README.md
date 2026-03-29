@@ -108,7 +108,7 @@ python main.py
 ```
 
 # Winsapp
-## Change xml to spoof hardware
+## Change xml to spoof hardware(for VM)
 ```
 <os firmware="efi">
   <type arch="x86_64" machine="q35">hvm</type>
@@ -125,8 +125,10 @@ python main.py
 ## Add TPM
 add hardware -> tpm
 
-## Create configuration
+## Pull winapps repo and create configuration create configuration
 ```
+git clone https://github.com/winapps-org/winapps.git ~/.local/share/winapps
+cd ~/.local/share/winapps
 mkdir -p ~/.config/winapps
 nano ~/.config/winapps/winapps.conf
 ```
@@ -192,4 +194,18 @@ source ~/.bashrc
 virsh -c qemu:///system list --all
 ```
 
+## ERROR: GROUP MEMBERSHIP CHECK ERROR.
+```
+# Create the group that the script expects
+sudo groupadd libvirt
+# Add yourself to both the real NixOS group and the dummy group
+sudo usermod -a -G libvirt loke
+sudo usermod -a -G libvirtd loke
+sudo usermod -a -G kvm loke
+```
 
+## ERROR: WINDOWS VM DOES NOT EXIST.
+```
+cd ~/.local/share/winapps
+LIBVIRT_DEFAULT_URI="qemu:///system" ./setup.sh
+```
