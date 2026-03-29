@@ -108,6 +108,23 @@ python main.py
 ```
 
 # Winsapp
+## Change xml to spoof hardware
+```
+<os firmware="efi">
+  <type arch="x86_64" machine="q35">hvm</type>
+  <smbios mode="host"/>
+</os>
+<sysinfo type="smbios">
+  <oemStrings>
+    <entry>BypassTPMCheck</entry>
+    <entry>BypassSecureBootCheck</entry>
+  </oemStrings>
+</sysinfo>
+```
+
+## Add TPM
+add hardware -> tpm
+
 ## Create configuration
 ```
 nano ~/.config/winapps/winapps.conf
