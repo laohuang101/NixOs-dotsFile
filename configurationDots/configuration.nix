@@ -12,6 +12,16 @@
 
   boot.kernelModules = [ "ashmem_linux" "binder_linux" ];
 
+  # WinApps
+  virtualisation.libvirtd = {
+    enable = true;
+    qemu = {
+      package = pkgs.qemu_kvm;
+      runAsRoot = true;
+      swtpm.enable = true; # Keep this one!
+    };
+  };
+  programs.virt-manager.enable = true;
   
   # Ensure you have Docker enabled
   virtualisation.docker.enable = true;
@@ -61,6 +71,9 @@
     # Force Chromium and Electron apps to bypass XWayland
     NIXOS_OZONE_WL = "1";
   };
+
+  # This is for winapps to load windows app
+  environment.localBinInPath = true;
   
   hardware.nvidia = {
     # This is required for Wayland compositors like Niri to work at all
@@ -237,7 +250,7 @@
     isNormalUser = true;
     description = "loke";
     shell = pkgs.fish;
-    extraGroups = [ "networkmanager" "wheel" "video" "input" "docker" "render" ];
+    extraGroups = [ "networkmanager" "wheel" "video" "input" "docker" "render" "libvirtd" "libvirt"  "kvm" ];
     packages = with pkgs; [
     #  thunderbird
     ];
@@ -246,6 +259,10 @@
 
   # Install firefox.
   programs.firefox.enable = false;
+  
+  # Enable tor daemon
+  services.tor.enable = true;
+  services.tor.client.enable = true;
 
   # Install Steam
   programs.steam = {
@@ -271,8 +288,10 @@
     #Editor --nano is being installed by default
     vim
     vscode
-    jetbrains.idea
-    pkgs.zed-editor
+    
+    # .net
+    dotnet-sdk_8
+    dotnet-runtime_8
 
     pkgs.jdk25
     python3
@@ -294,6 +313,7 @@
 
     #Browser
     chromium
+    tor-browser
 
     #Terminal rice
     kitty
@@ -335,6 +355,7 @@
     binwalk
     exiftool
     wireshark
+    binutils
 
     # Reverse
     ghidra
@@ -360,10 +381,7 @@
     # Ai - for iflow
     nodejs
     nodePackages.npm
-    # Ai - claude
-    # inputs.claude-code.packages.${pkgs.system}.default
-
-
+    
     #Music
     musikcube
 
@@ -377,7 +395,6 @@
     fzf
     
     # Screen Recorder
-    wf-recorder
     obs-studio
 
     # Notif
@@ -394,15 +411,31 @@
     ani-cli     
 
     # Game
-    #  heroic-bin
+    heroic
     scrcpy
     android-tools
 
-    # YouTube audio download
-    yt-dlp    
-
     # video compress
     pkgs.handbrake
+
+    # video editor
+    pkgs.kdePackages.kdenlive
+
+    # doc
+    pkgs.onlyoffice-desktopeditors
+
+    # WinApps
+    freerdp
+    libvirt
+    virt-viewer
+    swtpm
+    libtpms
+    dialog
+
+    # lutris
+    lutris
+    wineWowPackages.stable
+    winetricks
   ];
 
   # Enable XDG portals for screen sharing/compatibility
