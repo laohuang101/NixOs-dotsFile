@@ -107,9 +107,61 @@ pip install pylrc
 python main.py
 ```
 
-# Upcomming
-- Other CTF tools
-- Ascii Img
-- Login rice
+# Winsapp
+## Create configuration
+```
+nano ~/.config/winapps/winapps.conf
+```
+
+```
+RDP_USER="winapps"
+RDP_PASS="mypassword"
+WAFLAVOR="libvirt"
+GUEST_NAME="RDPWindows"
+LIBVIRT_URI="qemu:///system"
+```
+
+## In windows
+1. Create winapss user and password
+2. Allow the user to have admin access
+```
+net user winapps mypassword /add
+net localgroup administrators winapps /add
+```
+
+3. Add the user to the Remote Desktop whitelist
+*in remote desktop settings -> add user
+
+```
+:: 1. The standard allowlist disable
+reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Terminal Server\TSAppAllowList" /v fDisabledAllowList /t REG_DWORD /d 1 /f
+
+:: 2. The Group Policy override
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services" /v fAllowUnlistedRemotePrograms /t REG_DWORD /d 1 /f
+
+:: 3. The 'Applications Specified' override
+reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Terminal Server\TSAppAllowList" /v fApplicationsSpecified /t REG_DWORD /d 0 /f
+```
+
+
+## Run installation
+```
+rm -rf ~/.config/freerdp/server
+cd ~/.local/share/winapps
+LIBVIRT_DEFAULT_URI="qemu:///system" ./setup.sh
+```
+
+## VM does not exist error & App not exist error
+```
+mkdir -p ~/.config/libvirt
+echo 'uri_default = "qemu:///system"' >> ~/.config/libvirt/libvirt.conf
+echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc
+source ~/.bashrc
+```
+
+## Check which vm is running
+```
+virsh -c qemu:///system list --all
+```
 
 
