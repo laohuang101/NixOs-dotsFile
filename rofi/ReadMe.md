@@ -1,0 +1,14 @@
+# Using configuration from adi1090x ( https://github.com/adi1090x/rofi )
+
+```
+git clone --depth=1 https://github.com/adi1090x/rofi.git ~/.config/rofi-themes
+```
+
+
+```
+cd ~/.config/rofi-themes
+
+chmod +x setup.sh
+
+./setup.sh
+```
