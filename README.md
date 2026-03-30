@@ -1,3 +1,5 @@
+# Bruhhh somehow cant pull quickshell repo time to go back arch
+
 # Migrate (This included zed and other application that is super duper slow to download...)
 ```
 # Create an 64GB swap file
